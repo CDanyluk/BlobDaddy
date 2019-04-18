@@ -7,6 +7,8 @@ TagManager:
   - person
   - shirt
   - shirt_tag
+  - EdgeY
+  - EdgeX
   layers:
   - Default
   - TransparentFX
