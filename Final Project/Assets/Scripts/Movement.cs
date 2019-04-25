@@ -3,6 +3,7 @@ using System.Collections;
 
 public class Movement : MonoBehaviour
 {
+    //Movement
     public float accelerationTime = 2f;
     public float maxSpeed = 5f;
     private Vector2 movement;
@@ -44,6 +45,14 @@ public class Movement : MonoBehaviour
         {
             movement.y += -1;
         }
+
+        if (col.gameObject.tag == "gold" || col.gameObject.tag == "silver" || col.gameObject.tag == "bronze")
+        {
+            Physics2D.IgnoreCollision(col.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
+            Physics2D.IgnoreLayerCollision(5, 8);
+        }
     }
+
+
 
 }

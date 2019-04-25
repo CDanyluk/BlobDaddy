@@ -9,6 +9,13 @@ TagManager:
   - shirt_tag
   - EdgeY
   - EdgeX
+  - moneyText
+  - yellow
+  - blue
+  - red
+  - gold
+  - silver
+  - bronze
   layers:
   - Default
   - TransparentFX
@@ -18,7 +25,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Blob
   - 
   - 
   - 
