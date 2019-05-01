@@ -6,35 +6,35 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Image))]
 public class DragMe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-	public bool dragOnSurfaces = true;
-	
-	private Dictionary<int,GameObject> m_DraggingIcons = new Dictionary<int, GameObject>();
-	private Dictionary<int, RectTransform> m_DraggingPlanes = new Dictionary<int, RectTransform>();
+    public bool dragOnSurfaces = true;
+
+    private Dictionary<int, GameObject> m_DraggingIcons = new Dictionary<int, GameObject>();
+    private Dictionary<int, RectTransform> m_DraggingPlanes = new Dictionary<int, RectTransform>();
 
     public GameObject blob;
     private GameObject item;
 
     public void OnBeginDrag(PointerEventData eventData)
-	{
-		var canvas = FindInParents<Canvas>(gameObject);
-		if (canvas == null)
-			return;
+    {
+        var canvas = FindInParents<Canvas>(gameObject);
+        if (canvas == null)
+            return;
 
-		// We have clicked something that can be dragged.
-		// What we want to do is create an icon for this.
-		m_DraggingIcons[eventData.pointerId] = new GameObject("icon");
+        // We have clicked something that can be dragged.
+        // What we want to do is create an icon for this.
+        m_DraggingIcons[eventData.pointerId] = new GameObject("icon");
 
-		m_DraggingIcons[eventData.pointerId].transform.SetParent (canvas.transform, false);
-		m_DraggingIcons[eventData.pointerId].transform.SetAsLastSibling();
-		
-		var image = m_DraggingIcons[eventData.pointerId].AddComponent<Image>();
-		// The icon will be under the cursor.
-		// We want it to be ignored by the event system.
-		var group = m_DraggingIcons[eventData.pointerId].AddComponent<CanvasGroup>();
-		group.blocksRaycasts = false;
+        m_DraggingIcons[eventData.pointerId].transform.SetParent(canvas.transform, false);
+        m_DraggingIcons[eventData.pointerId].transform.SetAsLastSibling();
 
-		image.sprite = GetComponent<Image>().sprite;
-		image.SetNativeSize();
+        var image = m_DraggingIcons[eventData.pointerId].AddComponent<Image>();
+        // The icon will be under the cursor.
+        // We want it to be ignored by the event system.
+        var group = m_DraggingIcons[eventData.pointerId].AddComponent<CanvasGroup>();
+        group.blocksRaycasts = false;
+
+        image.sprite = GetComponent<Image>().sprite;
+        image.SetNativeSize();
 
         // Custom code
         image.rectTransform.sizeDelta = new Vector2(100, 100);
@@ -42,44 +42,45 @@ public class DragMe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
 
         if (dragOnSurfaces)
-			m_DraggingPlanes[eventData.pointerId] = transform as RectTransform;
-		else
-			m_DraggingPlanes[eventData.pointerId]  = canvas.transform as RectTransform;
-		
-		SetDraggedPosition(eventData);
-	}
+            m_DraggingPlanes[eventData.pointerId] = transform as RectTransform;
+        else
+            m_DraggingPlanes[eventData.pointerId] = canvas.transform as RectTransform;
 
-	public void OnDrag(PointerEventData eventData)
-	{
-		if (m_DraggingIcons[eventData.pointerId] != null)
-			SetDraggedPosition(eventData);
-	}
+        SetDraggedPosition(eventData);
+    }
 
-	private void SetDraggedPosition(PointerEventData eventData)
-	{
-		if (dragOnSurfaces && eventData.pointerEnter != null && eventData.pointerEnter.transform as RectTransform != null)
-			m_DraggingPlanes[eventData.pointerId] = eventData.pointerEnter.transform as RectTransform;
-		
-		var rt = m_DraggingIcons[eventData.pointerId].GetComponent<RectTransform>();
-		Vector3 globalMousePos;
-		if (RectTransformUtility.ScreenPointToWorldPointInRectangle(m_DraggingPlanes[eventData.pointerId], eventData.position, eventData.pressEventCamera, out globalMousePos))
-		{
-			rt.position = globalMousePos;
-			rt.rotation = m_DraggingPlanes[eventData.pointerId].rotation;
-		}
-	}
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (m_DraggingIcons[eventData.pointerId] != null)
+            SetDraggedPosition(eventData);
+    }
 
-	public void OnEndDrag(PointerEventData eventData)
-	{
-		if (m_DraggingIcons[eventData.pointerId] != null)
-			Destroy(m_DraggingIcons[eventData.pointerId]);
+    private void SetDraggedPosition(PointerEventData eventData)
+    {
+        if (dragOnSurfaces && eventData.pointerEnter != null && eventData.pointerEnter.transform as RectTransform != null)
+            m_DraggingPlanes[eventData.pointerId] = eventData.pointerEnter.transform as RectTransform;
 
-		m_DraggingIcons[eventData.pointerId] = null;
+        var rt = m_DraggingIcons[eventData.pointerId].GetComponent<RectTransform>();
+        Vector3 globalMousePos;
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(m_DraggingPlanes[eventData.pointerId], eventData.position, eventData.pressEventCamera, out globalMousePos))
+        {
+            rt.position = globalMousePos;
+            rt.rotation = m_DraggingPlanes[eventData.pointerId].rotation;
+        }
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (m_DraggingIcons[eventData.pointerId] != null)
+            Destroy(m_DraggingIcons[eventData.pointerId]);
+
+        m_DraggingIcons[eventData.pointerId] = null;
 
         // Custom drop code
         float distance = Vector2.Distance(item.transform.position, blob.transform.position);
         if (distance < 20)
         {
+            // Food items
             if (GameManager.money >= 100)
             {
                 if (item.tag == "red")
@@ -92,31 +93,51 @@ public class DragMe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
                     GameManager.removeMoney(100);
                     GameManager.addBlueExp(0.1f);
                 }
-                else
+                else if (item.tag == "yellow")
                 {
                     GameManager.removeMoney(100);
                     GameManager.addYellowExp(0.1f);
                 }
+                // Background items
             }
 
+        }
+        if (GameManager.money >= 1000)
+        {
+            if (item.tag == "sunset")
+            {
+                GameManager.removeMoney(1000);
+                GameManager.setSunset();
+            }
+            else if (item.tag == "night")
+            {
+                GameManager.removeMoney(1000);
+                GameManager.setNight();
+            }
+            else if (item.tag == "day")
+            {
+                GameManager.removeMoney(1000);
+                GameManager.setDay();
+            }
         }
 
     }
 
-	static public T FindInParents<T>(GameObject go) where T : Component
-	{
-		if (go == null) return null;
-		var comp = go.GetComponent<T>();
+        static public T FindInParents<T>(GameObject go) where T : Component
+        {
+            if (go == null) return null;
+            var comp = go.GetComponent<T>();
 
-		if (comp != null)
-			return comp;
-		
-		var t = go.transform.parent;
-		while (t != null && comp == null)
-		{
-			comp = t.gameObject.GetComponent<T>();
-			t = t.parent;
-		}
-		return comp;
-	}
-}
+            if (comp != null)
+                return comp;
+
+            var t = go.transform.parent;
+            while (t != null && comp == null)
+            {
+                comp = t.gameObject.GetComponent<T>();
+                t = t.parent;
+            }
+            return comp;
+        }
+    }
+

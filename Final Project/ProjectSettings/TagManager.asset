@@ -16,6 +16,12 @@ TagManager:
   - gold
   - silver
   - bronze
+  - day
+  - sunset
+  - night
+  - background
+  - crown
+  - partyhat
   layers:
   - Default
   - TransparentFX

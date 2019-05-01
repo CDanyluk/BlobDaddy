@@ -16,12 +16,18 @@ public class GameManager : MonoBehaviour
     public static int money;
     public static string blobType;
 
-    //public static float exp;
+    // Evolution stuff
     public static float blueExp;
     public static float redExp;
     public static float yellowExp;
     public GameObject blobChild;
     public static List<GameObject> Children;
+
+    // Background
+    public GameObject background;
+    public static List<GameObject> backgroundImages;
+
+    private Camera cam;
 
     void Start()
     {
@@ -37,6 +43,15 @@ public class GameManager : MonoBehaviour
         }
         Debug.Log(Children.Count);
 
+        // Background code
+        backgroundImages = new List<GameObject>();
+        foreach (Transform child in background.transform)
+        {
+            backgroundImages.Add(child.gameObject);
+        }
+
+        cam = Camera.main;
+
     }
 
     private static void resetBlob()
@@ -47,36 +62,128 @@ public class GameManager : MonoBehaviour
         Children[2].SetActive(false);
         Children[3].SetActive(false);
         Children[4].SetActive(false);
+        Children[5].SetActive(false);
+        Children[6].SetActive(false);
+        Children[7].SetActive(false);
+        Children[8].SetActive(false);
+        Children[9].SetActive(false);
     }
 
     private static void evolveYellow()
     {
-        blobType = "yellow";
+        // Set them all to be false
         Children[0].SetActive(false);
-        Children[1].SetActive(true);
+        Children[1].SetActive(false);
         Children[2].SetActive(false);
         Children[3].SetActive(false);
         Children[4].SetActive(false);
+        Children[5].SetActive(false);
+        Children[6].SetActive(false);
+        Children[7].SetActive(false);
+        Children[8].SetActive(false);
+        Children[9].SetActive(false);
+        if (blobType == "yellow")
+        {
+            blobType = "yellow2";
+            // Set the second yellow blob to be on and not the first
+            Children[2].SetActive(true);
+        }
+        else if (blobType == "blue2")
+        {
+            blobType = "green";
+            // Set the blob to be green
+            Children[7].SetActive(true);
+        }
+        else if (blobType == "red2")
+        {
+            blobType = "orange";
+            // Set the blob to be orange
+            Children[9].SetActive(true);
+        }
+        else
+        {
+            // Set the first yellow blob to be on
+            blobType = "yellow";
+            Children[1].SetActive(true);
+        }
     }
 
     private static void evolveBlue()
     {
-        blobType = "blue";
+        // Set them all to be false
         Children[0].SetActive(false);
         Children[1].SetActive(false);
         Children[2].SetActive(false);
-        Children[3].SetActive(true);
+        Children[3].SetActive(false);
         Children[4].SetActive(false);
+        Children[5].SetActive(false);
+        Children[6].SetActive(false);
+        Children[7].SetActive(false);
+        Children[8].SetActive(false);
+        Children[9].SetActive(false);
+        if (blobType == "blue")
+        {
+            blobType = "blue2";
+            // Set the second blue blob to be on and not the first
+            Children[6].SetActive(true);
+        }
+        else if (blobType == "red2")
+        {
+            blobType = "purple";
+            // Set the blob to be purple
+            Children[8].SetActive(true);
+
+        }
+        else if (blobType == "yellow2")
+        {
+            blobType = "green";
+            // Set the blob to be green
+            Children[7].SetActive(true);
+        }
+        else
+        {
+            // Set the first blue blob to be on
+            blobType = "blue";
+            Children[5].SetActive(true);
+        }
     }
 
     private static void evolveRed()
     {
-        blobType = "red";
+        // Set them all to be false
         Children[0].SetActive(false);
         Children[1].SetActive(false);
-        Children[2].SetActive(true);
+        Children[2].SetActive(false);
         Children[3].SetActive(false);
         Children[4].SetActive(false);
+        Children[5].SetActive(false);
+        Children[6].SetActive(false);
+        Children[7].SetActive(false);
+        Children[8].SetActive(false);
+        Children[9].SetActive(false);
+        if (blobType == "red")
+        {
+            blobType = "red2";
+            // Set the second red blob to be on and not the first
+            Children[4].SetActive(true);
+        } else if (blobType == "blue2")
+        {
+            blobType = "purple";
+            // Set the blob to be purple
+            Children[8].SetActive(true);
+
+        } else if (blobType == "yellow2")
+        {
+            blobType = "orange";
+            // Set the blob to be orange
+            Children[9].SetActive(true);
+        }
+        else
+        {
+            // Set the first red blob to be on
+            blobType = "red";
+            Children[3].SetActive(true);
+        }
     }
 
 
@@ -96,7 +203,26 @@ public class GameManager : MonoBehaviour
         money -= num;
     }
 
+    public static void setSunset()
+    {
+        backgroundImages[0].SetActive(false);
+        backgroundImages[1].SetActive(true);
+        backgroundImages[2].SetActive(false);
+    }
 
+    public static void setNight()
+    {
+        backgroundImages[0].SetActive(false);
+        backgroundImages[1].SetActive(false);
+        backgroundImages[2].SetActive(true);
+    }
+
+    public static void setDay()
+    {
+        backgroundImages[0].SetActive(true);
+        backgroundImages[1].SetActive(false);
+        backgroundImages[2].SetActive(false);
+    }
 
     public static void checkEvolve()
     {
