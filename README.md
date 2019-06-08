@@ -9,7 +9,10 @@ is hand drawn by Chantal Danyluk and game was developed in a two-person team wit
 
 ## Play It
 
-The game can be downloaded at: http://www.mediafire.com/file/o88df88qibnkdbi/Lab4.exe/file
+The game can be downloaded at: http://www.mediafire.com/file/9oa4oe16xj4qug3/Blob_Daddy.zip/file
+
+Unzip the file and double-click lab4.exe to run, contents of the folder must remain the same and lab4.exe must remain in the
+folder with its dependencies to run.
 
 Suggested settings are as follows:
 
