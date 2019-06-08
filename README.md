@@ -14,7 +14,9 @@ The game can be downloaded at: http://www.mediafire.com/file/o88df88qibnkdbi/Lab
 Suggested settings are as follows:
 
 Screen resolution: 1680 x 1050
+
 Graphics quality: Low
+
 Windowed: Enabled
 
 ## Music
